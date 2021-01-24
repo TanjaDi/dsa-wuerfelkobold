@@ -1,0 +1,21 @@
+:host {
+    padding: 1rem;
+    display: block;
+    min-width: 18rem;
+
+    .headline {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .language {
+        padding: 0.5rem 0;
+
+        mat-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem 0;
+        }
+    }
+}

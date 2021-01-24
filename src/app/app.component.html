@@ -1,0 +1,51 @@
+<mat-drawer-container class="example-container" hasBackdrop="true">
+    <mat-drawer #drawer mode="over">
+        <app-settings (closeDrawer)="drawer.close()"></app-settings>
+    </mat-drawer>
+    <mat-drawer-content>
+        <mat-toolbar color="">
+            <button mat-icon-button aria-label="Menu" (click)="drawer.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>{{ 'GENERAL.APP_NAME' | translate }}</span>
+            <span class="toolbarSpacer"></span>
+            <button class="actionButton" mat-flat-button [color]="editMode ? 'primary' : 'accent'" (click)="onToggleEditMode()">
+                <mat-icon>{{ editMode ? 'save' : 'create' }}</mat-icon>
+                {{ (editMode ? 'GENERAL.SAVE' : 'GENERAL.EDIT') | translate }}
+            </button>
+        </mat-toolbar>
+        <div class="content" role="main">
+            <div class="topRow">
+                <h1 *ngIf="!editMode">{{ title }}</h1>
+                <mat-form-field *ngIf="editMode" class="characterNameField">
+                    <input
+                        matInput
+                        required
+                        minlength="2"
+                        [(ngModel)]="title"
+                        [placeholder]="'CHARACTER_NAME_PLACEHOLDER' | translate"
+                    />
+                </mat-form-field>
+            </div>
+            <app-attributes [editMode]="editMode" [save]="getSave$()"></app-attributes>
+
+            <mat-tab-group class="tabGroup">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tabIcon">menu_book</mat-icon>
+                        <span class="tabLabel">{{ 'TALENTS.HEADLINE' | translate }}</span>
+                    </ng-template>
+                    <app-talents [editMode]="editMode" [save]="getSave$()"></app-talents>
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tabIcon">military_tech</mat-icon>
+                        <span class="tabLabel">{{ 'COMBAT.HEADLINE' | translate }}</span>
+                    </ng-template>
+                    <app-combat [editMode]="editMode" [save]="getSave$()"></app-combat>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

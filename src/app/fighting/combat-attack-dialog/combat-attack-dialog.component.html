@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>{{ 'COMBAT.ATTACK' | translate }} {{ 'GENERAL.WITH' | translate }} {{ weapon.name }}</h1>
+<div mat-dialog-content>
+    <div class="combatAttributes">
+        <div>
+            <div class="attribute-abbr">
+                <label>{{ 'COMBAT.ABBR.ATTACK_POINTS' | translate }}</label>
+            </div>
+            <label class="attribute-value">{{ weapon.at }}</label>
+            <label class="attribute-label">{{ 'COMBAT.ATTACK_POINTS' | translate }}</label>
+        </div>
+    </div>
+    <div class="modifier">
+        <label>{{ 'GENERAL.SKILL_CHECK_MODIFIER_LABEL' | translate }}</label>
+        <mat-form-field>
+            <mat-label>{{ 'GENERAL.MODIFIER' | translate }}</mat-label>
+            <input matInput [(ngModel)]="modifier" (keyup)="onChangeModifier()" />
+        </mat-form-field>
+    </div>
+    <div class="diceRow">
+        <div class="diceWrapper shake-horizontal">
+            <label
+                [class]="
+                    'diceResultLabel fade-in ' +
+                    (isAttackSuccess ? 'diceColorGreen' : 'diceColorRed') +
+                    (attackResult === 1 ? ' grandSuccess' : '') +
+                    (attackResult === 20 ? ' totalFailure' : '')
+                "
+            >
+                {{ attackResult }}
+            </label>
+        </div>
+    </div>
+    <div class="endResult fade-in">
+        <label *ngIf="attackResultType === diceResultEnum.GRAND_SUCCESS" class="grandSuccess">{{
+            'GENERAL.GRAND_SUCCESS' | translate
+        }}</label>
+        <label *ngIf="attackResultType === diceResultEnum.SUCCESS" class="success">{{ 'GENERAL.SUCCESS' | translate }}</label>
+        <label *ngIf="attackResultType === diceResultEnum.FAILURE" class="failure">{{ 'GENERAL.FAILURE' | translate }}</label>
+        <label *ngIf="attackResultType === diceResultEnum.TOTAL_FAILURE" class="totalFailure">{{
+            'GENERAL.TOTAL_FAILURE' | translate
+        }}</label>
+    </div>
+
+    <div class="hitpoints" *ngIf="isAttackSuccess">
+        <h3>{{ 'COMBAT.HITTING' | translate }}</h3>
+        <div>
+            <div *ngFor="let result of hitpointsDiceResults; let index = index" class="diceWrapper shake-horizontal">
+                <label class="diceResultLabel fade-in">
+                    {{ hitpointsDiceResults[index] }}
+                </label>
+            </div>
+            <label class="plusModifier"> + {{ weapon.tp.modifier }} = </label>
+            <label class="hitpointsSum">{{ hitpointsSum }}</label>
+        </div>
+    </div>
+</div>

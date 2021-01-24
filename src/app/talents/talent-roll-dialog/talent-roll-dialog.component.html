@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>{{ 'GENERAL.SKILL_CHECK' | translate }}: {{ 'TALENTS.' + data.talent.id | translate }}</h1>
+<div mat-dialog-content>
+    <div class="characterAttributes">
+        <div *ngFor="let index of [0, 1, 2]">
+            <div class="attribute-abbr" [style]="'border-color: ' + attributes[index].color">
+                <label>{{ 'ATTRIBUTES.ABBR.' + attributes[index].id | translate }}</label>
+            </div>
+            <label class="attribute-value">{{ attributes[index].value }}</label>
+            <label class="attribute-label">{{ 'ATTRIBUTES.' + attributes[index].id | translate }}</label>
+        </div>
+    </div>
+    <div class="talentValue">
+        <label>{{ 'GENERAL.SKILL_VALUE' | translate }}:</label>
+        <label>{{ talentValue }}</label>
+    </div>
+    <div class="modifier">
+        <label>{{ 'GENERAL.SKILL_CHECK_MODIFIER_LABEL' | translate }}</label>
+        <mat-form-field>
+            <mat-label>{{ 'GENERAL.MODIFIER' | translate }}</mat-label>
+            <input matInput [(ngModel)]="modifier" (keyup)="onChangeModifier()" />
+        </mat-form-field>
+    </div>
+    <div class="diceRow">
+        <div *ngFor="let index of [0, 1, 2]" class="diceWrapper shake-horizontal">
+            <label
+                [class]="
+                    'diceResultLabel fade-in ' +
+                    (successDices[index] ? 'diceColorGreen' : 'diceColorRed') +
+                    (diceResult[index] === 1 ? ' grandSuccess' : '') +
+                    (diceResult[index] === 20 ? ' totalFailure' : '')
+                "
+            >
+                {{ diceResult[index] }}
+            </label>
+        </div>
+    </div>
+    <div class="endResult fade-in">
+        <label *ngIf="result === diceResultEnum.GRAND_SUCCESS" class="grandSuccess">{{
+            'GENERAL.GRAND_SUCCESS' | translate
+        }}</label>
+        <label *ngIf="result === diceResultEnum.SUCCESS" class="success">{{ 'GENERAL.SUCCESS' | translate }}</label>
+        <label *ngIf="result === diceResultEnum.FAILURE" class="failure">{{ 'GENERAL.FAILURE' | translate }}</label>
+        <label *ngIf="result === diceResultEnum.TOTAL_FAILURE" class="totalFailure">{{
+            'GENERAL.TOTAL_FAILURE' | translate
+        }}</label>
+    </div>
+</div>

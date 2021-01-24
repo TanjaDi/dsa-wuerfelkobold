@@ -1,0 +1,15 @@
+<div class="headline">
+    <h2>{{ 'SETTINGS.HEADLINE' | translate }}</h2>
+    <button mat-icon-button (click)="onCloseDrawer()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<div class="language">
+    <label id="languageLabel">{{ 'SETTINGS.LANGUAGE.LABEL' | translate }}</label>
+    <mat-radio-group aria-labelledby="languageLabel" [(ngModel)]="userLanguage" (change)="onChangeLanguage($event)">
+        <mat-radio-button *ngFor="let iLanguage of languages" [value]="iLanguage">
+            {{ 'SETTINGS.LANGUAGE.' + iLanguage.toUpperCase() | translate }}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>

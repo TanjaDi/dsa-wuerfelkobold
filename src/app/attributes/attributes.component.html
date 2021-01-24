@@ -1,0 +1,29 @@
+<div>
+    <h2>{{ 'ATTRIBUTES.HEADLINE' | translate }}</h2>
+    <div class="attributes">
+        <div class="attributes-mental">
+            <div *ngFor="let index of [0, 1, 2, 3]">
+                <div class="attribute-abbr" [style]="'border-color: ' + attributes[index].color">
+                    <label>{{ 'ATTRIBUTES.ABBR.' + attributes[index].id | translate }}</label>
+                </div>
+                <label *ngIf="!editMode" class="attribute-value">{{ attributes[index].value }}</label>
+                <mat-form-field *ngIf="editMode" class="attribute-value-field">
+                    <input matInput type="number" required min="7" max="20" [(ngModel)]="attributes[index].value" />
+                </mat-form-field>
+                <label class="attribute-label">{{ 'ATTRIBUTES.' + attributes[index].id | translate }}</label>
+            </div>
+        </div>
+        <div class="attributes-physical">
+            <div *ngFor="let index of [4, 5, 6, 7]">
+                <label class="attribute-label">{{ 'ATTRIBUTES.' + attributes[index].id | translate }}</label>
+                <label *ngIf="!editMode" class="attribute-value">{{ attributes[index].value }}</label>
+                <mat-form-field *ngIf="editMode" class="attribute-value-field">
+                    <input matInput type="number" required min="7" max="20" [(ngModel)]="attributes[index].value" />
+                </mat-form-field>
+                <div class="attribute-abbr" [style]="'border-color: ' + attributes[index].color">
+                    <label>{{ 'ATTRIBUTES.ABBR.' + attributes[index].id | translate }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

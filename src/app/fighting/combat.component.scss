@@ -1,0 +1,85 @@
+:host {
+    display: flex;
+    flex-direction: column;
+
+    .attributes {
+        padding: 1rem 0;
+        width: 19rem;
+        display: flex;
+
+        > div {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 20%;
+            border-style: solid;
+            border-width: thin;
+            border-color: lightslategrey;
+            padding: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #313131;
+
+            .attribute-abbr {
+                --circle-diameter: 2rem;
+
+                border-style: solid;
+                border-radius: 50%;
+                border-width: medium;
+                width: var(--circle-diameter);
+                height: var(--circle-diameter);
+                line-height: var(--circle-diameter);
+                padding: 2px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                label {
+                    font-size: larger;
+                }
+            }
+
+            .attribute-value {
+                font-size: x-large;
+                padding: 10px;
+            }
+
+            .attribute-value-field {
+                width: 2rem;
+                text-align: center;
+            }
+
+            .attribute-label {
+                font-size: smaller;
+                font-style: italic;
+                word-break: break-word;
+                text-align: center;
+                flex-basis: 50%;
+            }
+        }
+    }
+
+    table {
+        width: 100%;
+
+        td {
+            button {
+                margin-left: 0.5rem;
+            }
+
+            .attribute-value-field {
+                width: 1.5rem;
+                text-align: center;
+            }
+            .attribute-value-field-long {
+                width: 6rem;
+            }
+        }
+    }
+
+    .addWeaponButton,
+    .removeWeaponsButton {
+        align-self: flex-start;
+        margin: 0.5rem 0;
+    }
+}

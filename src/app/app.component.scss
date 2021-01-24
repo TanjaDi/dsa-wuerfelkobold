@@ -1,0 +1,30 @@
+:host {
+    .toolbarSpacer {
+        flex: 1 1 auto;
+    }
+    .content {
+        background-color: var(--background-color);
+        padding: 1.5rem;
+
+        .topRow {
+            display: flex;
+            justify-content: space-between;
+
+            .actionButton {
+                height: 100%;
+            }
+        }
+
+        .tabGroup {
+            padding: 2rem 0;
+
+            .tabIcon {
+                padding-right: 0.5rem;
+            }
+
+            .tabLabel {
+                font-size: larger;
+            }
+        }
+    }
+}

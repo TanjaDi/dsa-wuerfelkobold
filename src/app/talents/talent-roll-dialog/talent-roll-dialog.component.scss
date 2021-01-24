@@ -1,0 +1,132 @@
+@import '../../../assets/scss/keyframes.scss';
+
+.characterAttributes {
+    display: flex;
+
+    > div {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 20%;
+        border-style: solid;
+        border-width: thin;
+        border-color: lightslategrey;
+        padding: 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #313131;
+
+        .attribute-abbr {
+            --circle-diameter: 2rem;
+
+            border-style: solid;
+            border-radius: 50%;
+            border-width: medium;
+            width: var(--circle-diameter);
+            height: var(--circle-diameter);
+            line-height: var(--circle-diameter);
+            padding: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            label {
+                font-size: larger;
+            }
+        }
+
+        .attribute-value {
+            font-size: x-large;
+            padding: 10px;
+        }
+
+        .attribute-label {
+            font-size: smaller;
+            font-style: italic;
+            word-break: break-word;
+            text-align: center;
+            flex-basis: 50%;
+        }
+    }
+}
+
+.talentValue {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 0;
+
+    > label {
+        width: 50%;
+    }
+}
+
+.modifier {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 0;
+
+    > label {
+        width: 50%;
+    }
+    mat-form-field {
+        flex-basis: 50%;
+        width: 4rem;
+    }
+}
+
+.diceRow {
+    display: flex;
+    justify-content: space-around;
+
+    .diceWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        border: thin solid darkgrey;
+        border-radius: 10%;
+        background-color: lightgrey;
+
+        .diceResultLabel {
+            font-size: x-large;
+
+            &.diceColorRed {
+                color: red;
+            }
+            &.diceColorGreen {
+                color: green;
+            }
+            &.grandSuccess,
+            &.totalFailure {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .shake-horizontal {
+        animation: shake-horizontal 0.8s both;
+    }
+}
+
+.fade-in {
+    animation: fade-in 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+}
+
+.endResult {
+    padding: 2rem 0;
+    text-align: center;
+    font-size: x-large;
+    font-weight: bold;
+
+    .grandSuccess,
+    .success {
+        color: green;
+    }
+    .failure,
+    .totalFailure {
+        color: red;
+    }
+}

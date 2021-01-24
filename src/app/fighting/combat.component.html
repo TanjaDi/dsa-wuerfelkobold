@@ -1,0 +1,110 @@
+<div class="attributes">
+    <div>
+        <div class="attribute-abbr">
+            <label>{{ 'ATTRIBUTES.ABBR.INITIATIVE' | translate }}</label>
+        </div>
+        <label *ngIf="!editMode" class="attribute-value">{{ combatAttributes.initiative }}</label>
+        <mat-form-field *ngIf="editMode" class="attribute-value-field">
+            <input matInput type="number" required min="0" max="20" [(ngModel)]="combatAttributes.initiative" />
+        </mat-form-field>
+        <label class="attribute-label">{{ 'ATTRIBUTES.INITIATIVE' | translate }}</label>
+        <button mat-icon-button (click)="onRollDice('initiative')" color="primary">
+            <mat-icon>casino</mat-icon>
+        </button>
+        <div>
+            <label>{{ combatAttributes.initiative }} + </label>
+            <label
+                >{{ lastInitiativeDiceRoll ? lastInitiativeDiceRoll : '1' + ('GENERAL.ABBR.DICE' | translate) + '6' }} =
+            </label>
+            <label>{{ lastInitiativeDiceRoll ? combatAttributes.initiative + lastInitiativeDiceRoll : '?' }}</label>
+        </div>
+    </div>
+    <div>
+        <div class="attribute-abbr">
+            <label>{{ 'ATTRIBUTES.ABBR.DODGING' | translate }}</label>
+        </div>
+        <label *ngIf="!editMode" class="attribute-value">{{ combatAttributes.dodging }}</label>
+        <mat-form-field *ngIf="editMode" class="attribute-value-field">
+            <input matInput type="number" required min="0" max="20" [(ngModel)]="combatAttributes.dodging" />
+        </mat-form-field>
+        <label class="attribute-label">{{ 'ATTRIBUTES.DODGING' | translate }}</label>
+        <button mat-icon-button (click)="onRollDice('dodging')" color="primary">
+            <mat-icon>casino</mat-icon>
+        </button>
+        <div>
+            <label>{{ combatAttributes.dodging }} vs </label>
+            <label>{{ lastDodgingDiceRoll ? lastDodgingDiceRoll : '1' + ('GENERAL.ABBR.DICE' | translate) + '20' }} = </label>
+            <label>{{
+                lastDodgingDiceRoll
+                    ? ((lastDodgingDiceRoll <= combatAttributes.dodging ? 'GENERAL.SUCCESS' : 'GENERAL.FAILURE') | translate)
+                    : '?'
+            }}</label>
+        </div>
+    </div>
+</div>
+
+<table mat-table [dataSource]="weaponsDataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ 'COMBAT.WEAPON' | translate }}</th>
+        <td mat-cell *matCellDef="let weapon">
+            <span *ngIf="!editMode">{{ weapon.name }}</span>
+            <mat-form-field *ngIf="editMode" class="attribute-value-field-long">
+                <input matInput required [(ngModel)]="weapon.name" placeholder="Name" />
+            </mat-form-field>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="tp">
+        <th mat-header-cell *matHeaderCellDef>{{ 'COMBAT.HITPOINTS' | translate }}</th>
+        <td mat-cell *matCellDef="let weapon">
+            <span *ngIf="!editMode">{{ weapon.tp.dice }}</span>
+            <mat-form-field *ngIf="editMode" class="attribute-value-field">
+                <input matInput required type="number" min="-20" max="20" [(ngModel)]="weapon.tp.dice" />
+            </mat-form-field>
+            {{ 'GENERAL.ABBR.DICE' | translate }}6 +
+            <span *ngIf="!editMode">{{ weapon.tp.modifier }}</span>
+            <mat-form-field *ngIf="editMode" class="attribute-value-field">
+                <input matInput required type="number" min="-20" max="20" [(ngModel)]="weapon.tp.modifier" />
+            </mat-form-field>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="at">
+        <th mat-header-cell *matHeaderCellDef>{{ 'COMBAT.ATTACK_POINTS' | translate }}</th>
+        <td mat-cell *matCellDef="let weapon">
+            <span *ngIf="!editMode">{{ weapon.at }}</span>
+            <mat-form-field *ngIf="editMode" class="attribute-value-field">
+                <input matInput required type="number" min="-20" max="20" [(ngModel)]="weapon.at" />
+            </mat-form-field>
+            <button mat-icon-button (click)="onClickAttack(weapon)" color="primary">
+                <mat-icon>casino</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="pa">
+        <th mat-header-cell *matHeaderCellDef>{{ 'COMBAT.PARRY_POINTS' | translate }}</th>
+        <td mat-cell *matCellDef="let weapon">
+            <span *ngIf="!editMode">{{ weapon.pa }}</span>
+            <mat-form-field *ngIf="editMode" class="attribute-value-field">
+                <input matInput required type="number" min="-20" max="20" [(ngModel)]="weapon.pa" />
+            </mat-form-field>
+            <button mat-icon-button (click)="onClickParry(weapon)" color="primary">
+                <mat-icon>casino</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+</table>
+<button *ngIf="editMode" mat-flat-button color="accent" class="addWeaponButton" (click)="onAddWeapon()">
+    {{ 'COMBAT.ADD_WEAPON' | translate }}
+</button>
+<button
+    *ngIf="editMode"
+    [disabled]="weaponsDataSource.data.length === 0"
+    mat-flat-button
+    color="accent"
+    class="removeWeaponsButton"
+    (click)="onRemoveAllWeapons()"
+>
+    {{ 'COMBAT.REMOVE_WEAPONS' | translate }}
+</button>

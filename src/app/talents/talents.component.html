@@ -1,0 +1,42 @@
+<div>
+    <mat-form-field class="filterInput">
+        <mat-label>{{ 'GENERAL.FILTER' | translate }}</mat-label>
+        <input matInput (keyup)="onInputFilter($event)" [placeholder]="'TALENTS.HEADLINE' | translate" #input />
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>{{ 'TALENTS.HEADLINE' | translate }}</th>
+            <td mat-cell *matCellDef="let talent">{{ 'TALENTS.' + talent.id | translate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="checkSum">
+            <th mat-header-cell *matHeaderCellDef>{{ 'GENERAL.CHECK' | translate }}</th>
+            <td mat-cell *matCellDef="let talent">
+                <!-- <span matTooltip="{{ 'ATTRIBUTES.CHARISMA' | translate }}"> -->
+                <span matTooltip="{{ talent.skillCheckAttributes | async }}">
+                    {{ talent.skillCheckSum }}
+                </span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef>{{ 'GENERAL.SKILL_VALUE' | translate }}</th>
+            <td mat-cell *matCellDef="let talent">
+                <span *ngIf="!editMode">{{ talent.value }}</span>
+                <mat-form-field *ngIf="editMode" class="talentValueField">
+                    <input matInput required type="number" min="-20" max="20" [(ngModel)]="talent.value" />
+                </mat-form-field>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>{{ 'GENERAL.ACTION' | translate }}</th>
+            <td mat-cell *matCellDef="let talent">
+                <button mat-icon-button (click)="onClickRollDice(talent)" color="primary">
+                    <mat-icon>casino</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
