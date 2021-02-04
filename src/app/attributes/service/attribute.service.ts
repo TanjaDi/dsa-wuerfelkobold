@@ -54,14 +54,13 @@ const ATTRIBUTES: Attribute[] = [
 export class AttributeService {
     private static readonly INITAL_ATTRIBUTE_VALUE = 12;
     private currentAttributes: Attribute[];
-    private readonly PLAYER_ATTRIBUTE_VALUES = 'player-attribute-values';
 
     constructor(private localStorageService: LocalStorageService, private translateService: TranslateService) {
         this.loadAttributes();
     }
 
     private loadAttributes() {
-        const storedAttributeValues = this.localStorageService.get(this.PLAYER_ATTRIBUTE_VALUES);
+        const storedAttributeValues = this.localStorageService.get(LocalStorageService.PLAYER_ATTRIBUTE_VALUES);
         let storedAttributeMap: { [key in AttributeId]: number };
         if (storedAttributeValues != null) {
             storedAttributeMap = JSON.parse(storedAttributeValues);
@@ -73,7 +72,7 @@ export class AttributeService {
                 }),
                 {} as { [key in AttributeId]: number }
             );
-            this.localStorageService.store(this.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(storedAttributeMap));
+            this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(storedAttributeMap));
         }
         this.currentAttributes = ATTRIBUTES.map((attribute) => {
             attribute.value = storedAttributeMap[attribute.id];
@@ -94,7 +93,7 @@ export class AttributeService {
                 [attribute.id]: newAttribute?.value || AttributeService.INITAL_ATTRIBUTE_VALUE,
             };
         }, {} as { [key in AttributeId]: number });
-        this.localStorageService.store(this.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(attributesValueMap));
+        this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(attributesValueMap));
     }
 
     formatAttributeSkillCheck(attributeIds: AttributeId[]): Observable<string> {

@@ -129,6 +129,8 @@
       "LABEL": "Sprache",
       "DE": "Deutsch",
       "EN": "Englisch"
-    }
+    },
+    "EXPORT": "Daten exportieren",
+    "IMPORT": "Daten hochladen"
   }
 }

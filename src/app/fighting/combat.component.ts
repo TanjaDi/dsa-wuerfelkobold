@@ -13,8 +13,6 @@ import { MatDialog } from '@angular/material/dialog';
     styleUrls: ['./combat.component.scss'],
 })
 export class CombatComponent implements OnInit, OnDestroy {
-    private readonly PLAYER_COMBAT_ATTRIBUTES = 'player-combat-attributes';
-
     @Input()
     save: Observable<void>;
     @Input()
@@ -87,7 +85,7 @@ export class CombatComponent implements OnInit, OnDestroy {
     }
 
     private loadCombatAttributes() {
-        const combatAttributesString = this.localStorageService.get(this.PLAYER_COMBAT_ATTRIBUTES);
+        const combatAttributesString = this.localStorageService.get(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES);
         if (combatAttributesString) {
             this.combatAttributes = JSON.parse(combatAttributesString);
         } else {
@@ -99,6 +97,6 @@ export class CombatComponent implements OnInit, OnDestroy {
     }
 
     private saveCombatAttributes() {
-        this.localStorageService.store(this.PLAYER_COMBAT_ATTRIBUTES, JSON.stringify(this.combatAttributes));
+        this.localStorageService.store(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES, JSON.stringify(this.combatAttributes));
     }
 }

@@ -129,6 +129,8 @@
       "LABEL": "Language",
       "DE": "German",
       "EN": "English"
-    }
+    },
+    "EXPORT": "Export data",
+    "IMPORT": "Upload data"
   }
 }

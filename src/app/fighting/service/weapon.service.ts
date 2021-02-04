@@ -16,12 +16,11 @@ export class Weapon {
     providedIn: 'root',
 })
 export class WeaponService {
-    private readonly PLAYER_WEAPONS = 'player-weapons';
     private weapons$: BehaviorSubject<Weapon[]>;
 
     constructor(private localStorageService: LocalStorageService) {
         this.weapons$ = new BehaviorSubject([]);
-        const playerWeaponsString = this.localStorageService.get(this.PLAYER_WEAPONS);
+        const playerWeaponsString = this.localStorageService.get(LocalStorageService.PLAYER_WEAPONS);
         if (playerWeaponsString?.length > 0) {
             this.weapons$.next(JSON.parse(playerWeaponsString));
         }
@@ -44,11 +43,11 @@ export class WeaponService {
 
     saveWeapons(weapons: Weapon[]): void {
         this.weapons$.next(weapons);
-        this.localStorageService.store(this.PLAYER_WEAPONS, JSON.stringify(weapons));
+        this.localStorageService.store(LocalStorageService.PLAYER_WEAPONS, JSON.stringify(weapons));
     }
 
     removeAllWeapons(): void {
         this.weapons$.next([]);
-        this.localStorageService.store(this.PLAYER_WEAPONS, JSON.stringify([]));
+        this.localStorageService.store(LocalStorageService.PLAYER_WEAPONS, JSON.stringify([]));
     }
 }

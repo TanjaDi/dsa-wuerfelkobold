@@ -485,7 +485,6 @@ export class TalentService {
             value: undefined,
         },
     ];
-    private readonly PLAYER_TALENT_VALUES = 'player-talent-values';
     private talents: Talent[];
 
     constructor(
@@ -500,7 +499,7 @@ export class TalentService {
     }
 
     private loadTalents() {
-        const storedTalentValues = this.localStorageService.get(this.PLAYER_TALENT_VALUES);
+        const storedTalentValues = this.localStorageService.get(LocalStorageService.PLAYER_TALENT_VALUES);
         let storedTalentMap: { [key in TalentId]: number };
         if (storedTalentValues != null) {
             storedTalentMap = JSON.parse(storedTalentValues);
@@ -512,7 +511,7 @@ export class TalentService {
                 }),
                 {} as { [key in TalentId]: number }
             );
-            this.localStorageService.store(this.PLAYER_TALENT_VALUES, JSON.stringify(storedTalentMap));
+            this.localStorageService.store(LocalStorageService.PLAYER_TALENT_VALUES, JSON.stringify(storedTalentMap));
         }
         this.talents = this.ALL_TALENTS.map((talent) => {
             talent.value = storedTalentMap[talent.id];
@@ -537,7 +536,7 @@ export class TalentService {
                 [talent.id]: newTalent?.value || TalentService.INITIAL_TALENT_VALUE,
             };
         }, {} as { [key in TalentId]: number });
-        this.localStorageService.store(this.PLAYER_TALENT_VALUES, JSON.stringify(talentValueMap));
+        this.localStorageService.store(LocalStorageService.PLAYER_TALENT_VALUES, JSON.stringify(talentValueMap));
     }
 
     private getTalentForTalentId(talentId: TalentId): Talent {
