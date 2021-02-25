@@ -1,11 +1,11 @@
-import { CombatAttackDialogComponent, CombatAttackDialogData } from './combat-attack-dialog/combat-attack-dialog.component';
-import { DiceRollService } from '../service/dice-roll.service';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscription } from 'rxjs';
-import { Weapon, WeaponService } from './service/weapon.service';
+import { DiceRollService } from '../service/dice-roll.service';
 import { LocalStorageService } from '../service/local-storage.service';
-import { MatDialog } from '@angular/material/dialog';
+import { CombatAttackDialogComponent, CombatAttackDialogData } from './combat-attack-dialog/combat-attack-dialog.component';
+import { Weapon, WeaponService } from './service/weapon.service';
 
 @Component({
     selector: 'app-combat',
@@ -46,7 +46,13 @@ export class CombatComponent implements OnInit, OnDestroy {
                 this.saveCombatAttributes();
             })
         );
-        this.loadCombatAttributes();
+        const combatAttributesString = this.localStorageService.get(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES);
+        this.loadCombatAttributes(combatAttributesString);
+        this.subscriptions.push(
+            this.localStorageService.changes(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES).subscribe((combatAttributes) => {
+                this.loadCombatAttributes(combatAttributes);
+            })
+        );
     }
 
     onClickAttack(weapon: Weapon): void {
@@ -84,8 +90,7 @@ export class CombatComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach((s) => s.unsubscribe());
     }
 
-    private loadCombatAttributes() {
-        const combatAttributesString = this.localStorageService.get(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES);
+    private loadCombatAttributes(combatAttributesString: string) {
         if (combatAttributesString) {
             this.combatAttributes = JSON.parse(combatAttributesString);
         } else {
@@ -97,6 +102,8 @@ export class CombatComponent implements OnInit, OnDestroy {
     }
 
     private saveCombatAttributes() {
-        this.localStorageService.store(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES, JSON.stringify(this.combatAttributes));
+        this.localStorageService.store(LocalStorageService.PLAYER_COMBAT_ATTRIBUTES, JSON.stringify(this.combatAttributes), {
+            noEmit: true,
+        });
     }
 }

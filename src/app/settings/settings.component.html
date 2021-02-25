@@ -15,5 +15,12 @@
 </div>
 
 <div class="exportImport">
-    <button mat-flat-button color="accent" (click)="downloadConfigData()">{{ 'SETTINGS.EXPORT' | translate }}</button>
+    <label>{{ 'SETTINGS.IMPORT_EXPORT.LABEL' | translate }}</label>
+    <button mat-flat-button color="accent" (click)="downloadConfigData()">
+        {{ 'SETTINGS.IMPORT_EXPORT.EXPORT' | translate }}
+    </button>
+
+    <ngx-dropzone (change)="onChangeDropzone($event)" accept="application/json" maxFileSize="3000">
+        <ngx-dropzone-label>{{ 'SETTINGS.IMPORT_EXPORT.IMPORT' | translate }}</ngx-dropzone-label>
+    </ngx-dropzone>
 </div>

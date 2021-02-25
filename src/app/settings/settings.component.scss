@@ -21,5 +21,19 @@
 
     .exportImport {
         padding: 0.5rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        ngx-dropzone {
+            background-color: transparent;
+            color: white;
+            height: auto;
+
+            ngx-dropzone-label {
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
     }
 }

@@ -1,9 +1,9 @@
-import { AttributeId, Attribute } from './../model/attribute';
-import { LocalStorageService } from './../../service/local-storage.service';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { LocalStorageService } from './../../service/local-storage.service';
+import { Attribute, AttributeId } from './../model/attribute';
 
 const ATTRIBUTES: Attribute[] = [
     {
@@ -56,11 +56,15 @@ export class AttributeService {
     private currentAttributes: Attribute[];
 
     constructor(private localStorageService: LocalStorageService, private translateService: TranslateService) {
-        this.loadAttributes();
+        const storedAttributeValues = this.localStorageService.get(LocalStorageService.PLAYER_ATTRIBUTE_VALUES);
+        this.loadAttributes(storedAttributeValues);
+
+        this.localStorageService.changes(LocalStorageService.PLAYER_ATTRIBUTE_VALUES).subscribe((newAttributes) => {
+            this.loadAttributes(newAttributes);
+        });
     }
 
-    private loadAttributes() {
-        const storedAttributeValues = this.localStorageService.get(LocalStorageService.PLAYER_ATTRIBUTE_VALUES);
+    private loadAttributes(storedAttributeValues: string) {
         let storedAttributeMap: { [key in AttributeId]: number };
         if (storedAttributeValues != null) {
             storedAttributeMap = JSON.parse(storedAttributeValues);
@@ -72,7 +76,7 @@ export class AttributeService {
                 }),
                 {} as { [key in AttributeId]: number }
             );
-            this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(storedAttributeMap));
+            this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(storedAttributeMap), {noEmit: true});
         }
         this.currentAttributes = ATTRIBUTES.map((attribute) => {
             attribute.value = storedAttributeMap[attribute.id];
@@ -93,7 +97,9 @@ export class AttributeService {
                 [attribute.id]: newAttribute?.value || AttributeService.INITAL_ATTRIBUTE_VALUE,
             };
         }, {} as { [key in AttributeId]: number });
-        this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(attributesValueMap));
+        this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(attributesValueMap), {
+            noEmit: true,
+        });
     }
 
     formatAttributeSkillCheck(attributeIds: AttributeId[]): Observable<string> {

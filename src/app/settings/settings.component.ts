@@ -1,7 +1,10 @@
 import { formatDate } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
+import { take } from 'rxjs/operators';
 import { ConfigData, ConfigExportImportService } from './../service/config-export-import.service';
 
 @Component({
@@ -13,10 +16,15 @@ export class SettingsComponent {
     @Output()
     closeDrawer: EventEmitter<void>;
 
+    uploadedFile: File;
     userLanguage: 'en' | 'de';
     readonly languages = ['de', 'en'];
 
-    constructor(private translateService: TranslateService, private configExportImportService: ConfigExportImportService) {
+    constructor(
+        private translateService: TranslateService,
+        private configExportImportService: ConfigExportImportService,
+        private matSnackBar: MatSnackBar
+    ) {
         this.userLanguage = this.translateService.currentLang.includes('de') ? 'de' : 'en';
         this.closeDrawer = new EventEmitter();
     }
@@ -38,6 +46,24 @@ export class SettingsComponent {
         linkElement.href = this.generateDownloadFile(configObject);
         linkElement.click();
         linkElement.remove();
+    }
+
+    onChangeDropzone(event: NgxDropzoneChangeEvent): void {
+        this.uploadedFile = event.addedFiles.find((f) => f);
+        if (this.uploadedFile) {
+            this.configExportImportService.importUploadedFile(this.uploadedFile);
+        } else if (event.rejectedFiles.length > 0) {
+            const rejectedFile = event.rejectedFiles.find((f) => f);
+            const reason = (rejectedFile as any).reason;
+            this.translateService
+                .get('SETTINGS.IMPORT_EXPORT.ERRORS.UPLOAD_FAILED', { reason })
+                .pipe(take(1))
+                .subscribe((errorMessage) => {
+                    this.matSnackBar.open(errorMessage, '', {
+                        duration: 7000,
+                    });
+                });
+        }
     }
 
     private generateDownloadFile(configObject: ConfigData): string {

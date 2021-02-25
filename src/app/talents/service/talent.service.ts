@@ -1,10 +1,10 @@
-import { TalentCategory } from './../model/talent';
-import { LocalStorageService } from './../../service/local-storage.service';
-import { DiceRollService } from './../../service/dice-roll.service';
 import { Injectable } from '@angular/core';
-import { TalentId, Talent } from '../model/talent';
+import { combineLatest } from 'rxjs';
 import { Attribute, AttributeId } from 'src/app/attributes/model/attribute';
 import { AttributeService } from 'src/app/attributes/service/attribute.service';
+import { Talent, TalentId } from '../model/talent';
+import { LocalStorageService } from './../../service/local-storage.service';
+import { TalentCategory } from './../model/talent';
 
 @Injectable({
     providedIn: 'root',
@@ -487,19 +487,25 @@ export class TalentService {
     ];
     private talents: Talent[];
 
-    constructor(
-        private attributeService: AttributeService,
-        private localStorageService: LocalStorageService
-    ) {
+    constructor(private attributeService: AttributeService, private localStorageService: LocalStorageService) {
         this.ALL_TALENTS.forEach((talent) => {
             talent.skillCheckAttributes = this.attributeService.formatAttributeSkillCheck(talent.attributes);
             talent.skillCheckSum = this.attributeService.calcSkillCheckSum(talent.attributes);
         });
-        this.loadTalents();
+        const storedTalentValues = this.localStorageService.get(LocalStorageService.PLAYER_TALENT_VALUES);
+        this.loadTalents(storedTalentValues);
+        const talentChanges$ = this.localStorageService.changes(LocalStorageService.PLAYER_TALENT_VALUES);
+        const attributeChanges$ = this.localStorageService.changes(LocalStorageService.PLAYER_ATTRIBUTE_VALUES);
+        combineLatest([talentChanges$, attributeChanges$]).subscribe(([talentValues, _]) => {
+            this.loadTalents(talentValues);
+            this.ALL_TALENTS.forEach((talent) => {
+                talent.skillCheckAttributes = this.attributeService.formatAttributeSkillCheck(talent.attributes);
+                talent.skillCheckSum = this.attributeService.calcSkillCheckSum(talent.attributes);
+            });
+        });
     }
 
-    private loadTalents() {
-        const storedTalentValues = this.localStorageService.get(LocalStorageService.PLAYER_TALENT_VALUES);
+    private loadTalents(storedTalentValues: string) {
         let storedTalentMap: { [key in TalentId]: number };
         if (storedTalentValues != null) {
             storedTalentMap = JSON.parse(storedTalentValues);
@@ -511,7 +517,9 @@ export class TalentService {
                 }),
                 {} as { [key in TalentId]: number }
             );
-            this.localStorageService.store(LocalStorageService.PLAYER_TALENT_VALUES, JSON.stringify(storedTalentMap));
+            this.localStorageService.store(LocalStorageService.PLAYER_TALENT_VALUES, JSON.stringify(storedTalentMap), {
+                noEmit: true,
+            });
         }
         this.talents = this.ALL_TALENTS.map((talent) => {
             talent.value = storedTalentMap[talent.id];
@@ -536,7 +544,9 @@ export class TalentService {
                 [talent.id]: newTalent?.value || TalentService.INITIAL_TALENT_VALUE,
             };
         }, {} as { [key in TalentId]: number });
-        this.localStorageService.store(LocalStorageService.PLAYER_TALENT_VALUES, JSON.stringify(talentValueMap));
+        this.localStorageService.store(LocalStorageService.PLAYER_TALENT_VALUES, JSON.stringify(talentValueMap), {
+            noEmit: true,
+        });
     }
 
     private getTalentForTalentId(talentId: TalentId): Talent {
