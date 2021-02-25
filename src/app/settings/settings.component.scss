@@ -19,15 +19,18 @@
         }
     }
 
+    .theme,
     .exportImport {
         padding: 0.5rem 0;
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+    }
 
+    .exportImport {
         ngx-dropzone {
             background-color: transparent;
-            color: white;
+            color: var(--text-color);
             height: auto;
 
             ngx-dropzone-label {

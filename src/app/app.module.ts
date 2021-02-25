@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -59,6 +60,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
         MatSidenavModule,
         MatSnackBarModule,
         MatToolbarModule,
+        MatSlideToggleModule,
         NgxDropzoneModule,
         TranslateModule.forRoot({
             loader: {

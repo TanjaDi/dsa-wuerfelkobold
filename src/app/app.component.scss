@@ -1,9 +1,11 @@
 :host {
+    .mat-drawer-container {
+        height: 100%;
+    }
     .toolbarSpacer {
         flex: 1 1 auto;
     }
     .content {
-        background-color: var(--background-color);
         padding: 1.5rem;
 
         .topRow {

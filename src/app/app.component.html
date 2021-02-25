@@ -1,15 +1,15 @@
-<mat-drawer-container class="example-container" hasBackdrop="true">
+<mat-drawer-container hasBackdrop="true" [class]="(isDarkTheme$ | async) ? 'dark-theme' : 'light-theme'">
     <mat-drawer #drawer mode="over">
         <app-settings (closeDrawer)="drawer.close()"></app-settings>
     </mat-drawer>
     <mat-drawer-content>
-        <mat-toolbar color="">
+        <mat-toolbar color="accent">
             <button mat-icon-button aria-label="Menu" (click)="drawer.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
             <span>{{ 'GENERAL.APP_NAME' | translate }}</span>
             <span class="toolbarSpacer"></span>
-            <button class="actionButton" mat-flat-button [color]="editMode ? 'primary' : 'accent'" (click)="onToggleEditMode()">
+            <button class="actionButton" mat-flat-button color="primary" (click)="onToggleEditMode()">
                 <mat-icon>{{ editMode ? 'save' : 'create' }}</mat-icon>
                 {{ (editMode ? 'GENERAL.SAVE' : 'GENERAL.EDIT') | translate }}
             </button>

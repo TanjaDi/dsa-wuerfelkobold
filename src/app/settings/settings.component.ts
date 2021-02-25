@@ -1,21 +1,24 @@
 import { formatDate } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ConfigData, ConfigExportImportService } from './../service/config-export-import.service';
+import { ThemeService } from './../service/theme.service';
 
 @Component({
     selector: 'app-settings',
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
     @Output()
     closeDrawer: EventEmitter<void>;
 
+    isDarkTheme$: Observable<boolean>;
     uploadedFile: File;
     userLanguage: 'en' | 'de';
     readonly languages = ['de', 'en'];
@@ -23,10 +26,15 @@ export class SettingsComponent {
     constructor(
         private translateService: TranslateService,
         private configExportImportService: ConfigExportImportService,
-        private matSnackBar: MatSnackBar
+        private matSnackBar: MatSnackBar,
+        private themeService: ThemeService
     ) {
         this.userLanguage = this.translateService.currentLang.includes('de') ? 'de' : 'en';
         this.closeDrawer = new EventEmitter();
+    }
+
+    ngOnInit() {
+        this.isDarkTheme$ = this.themeService.isDarkTheme$;
     }
 
     onChangeLanguage(event: MatRadioChange) {
@@ -36,6 +44,10 @@ export class SettingsComponent {
 
     onCloseDrawer(): void {
         this.closeDrawer.emit();
+    }
+
+    toggleDarkTheme(isChecked: boolean): void {
+        this.themeService.setDarkTheme(isChecked);
     }
 
     downloadConfigData(): void {

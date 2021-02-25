@@ -8,42 +8,42 @@ import { Attribute, AttributeId } from './../model/attribute';
 const ATTRIBUTES: Attribute[] = [
     {
         id: AttributeId.COURAGE,
-        color: 'red',
+        color: '#ff00009c',
         value: undefined,
     },
     {
         id: AttributeId.CLEVERNESS,
-        color: 'blueviolet',
+        color: '#633790',
         value: undefined,
     },
     {
         id: AttributeId.INTUITION,
-        color: 'green',
+        color: '#006500',
         value: undefined,
     },
     {
         id: AttributeId.CHARISMA,
-        color: 'darkblue',
+        color: '#00008b9e',
         value: undefined,
     },
     {
         id: AttributeId.DEXTERITY,
-        color: 'yellow',
+        color: '#a5a500',
         value: undefined,
     },
     {
         id: AttributeId.AGILITY,
-        color: 'cornflowerblue',
+        color: '#476bab',
         value: undefined,
     },
     {
         id: AttributeId.CONSTITUTION,
-        color: 'lightpink',
+        color: '#9c6d74',
         value: undefined,
     },
     {
         id: AttributeId.STRENGTH,
-        color: 'chocolate',
+        color: '#7b451e',
         value: undefined,
     },
 ];
@@ -76,7 +76,9 @@ export class AttributeService {
                 }),
                 {} as { [key in AttributeId]: number }
             );
-            this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(storedAttributeMap), {noEmit: true});
+            this.localStorageService.store(LocalStorageService.PLAYER_ATTRIBUTE_VALUES, JSON.stringify(storedAttributeMap), {
+                noEmit: true,
+            });
         }
         this.currentAttributes = ATTRIBUTES.map((attribute) => {
             attribute.value = storedAttributeMap[attribute.id];

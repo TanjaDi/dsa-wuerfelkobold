@@ -6,6 +6,7 @@ import { filter, map } from 'rxjs/operators';
     providedIn: 'root',
 })
 export class LocalStorageService {
+    public static readonly SETTING_THEME = 'setting-theme';
     public static readonly PLAYER_CHARACTER_NAME = 'player-character-name';
     public static readonly PLAYER_ATTRIBUTE_VALUES = 'player-attribute-values';
     public static readonly PLAYER_TALENT_VALUES = 'player-talent-values';
